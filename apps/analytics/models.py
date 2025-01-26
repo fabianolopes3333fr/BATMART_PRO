@@ -97,13 +97,17 @@ class Alert(BaseModel):
     name = models.CharField(max_length=200, db_index=True)
     description = models.TextField()
     metric = models.ForeignKey(Metric, on_delete=models.CASCADE, related_name='alerts')
-    condition = models.JSONField()  # Condição para disparo
+    CONDITION_CHOICES = [
+        ('info', _('Information')),
+        ('warning', _('Warning')),
+        ('critical', _('Critical')),
+        
+    ]
+    condition = models.JSONField(choices=CONDITION_CHOICES)  # Condição para disparo
     severity = models.CharField(
         max_length=50,
         choices=[
-            ('info', _('Information')),
-            ('warning', _('Warning')),
-            ('critical', _('Critical')),
+           
         ]
     )
     notification_channels = models.JSONField(default=list)

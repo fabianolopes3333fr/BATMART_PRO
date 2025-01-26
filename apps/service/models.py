@@ -35,17 +35,17 @@ class ServiceAppointment(BaseModel):
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name='appointments')
     scheduled_start = models.DateTimeField()
     scheduled_end = models.DateTimeField()
-    status = models.CharField(
-        max_length=50,
-        choices=[
-            ('scheduled', _('Scheduled')),
-            ('confirmed', _('Confirmed')),
-            ('in_progress', _('In Progress')),
-            ('completed', _('Completed')),
-            ('cancelled', _('Cancelled')),
-            ('no_show', _('No Show')),
-        ]
-    )
+    STATUS_CHOICES = [
+        ('scheduled', _('Scheduled')),
+        ('confirmed', _('Confirmed')),
+        ('in_progress', _('In Progress')),
+        ('completed', _('Completed')),
+        ('cancelled', _('Cancelled')),
+        ('no_show', _('No Show')),
+        # outros status...
+    ]
+    
+    status = models.CharField(max_length=50,choices=STATUS_CHOICES)
     assigned_staff = models.ManyToManyField(CompanyUser, related_name='appointments')
     location_data = models.JSONField(default=dict)
     notes = models.TextField(blank=True)
@@ -68,16 +68,16 @@ class ServiceQuote(BaseModel):
     estimated_duration = models.IntegerField()  # em minutos
     estimated_cost = models.DecimalField(max_digits=10, decimal_places=2)
     valid_until = models.DateTimeField()
-    status = models.CharField(
-        max_length=50,
-        choices=[
-            ('draft', _('Draft')),
-            ('sent', _('Sent')),
-            ('accepted', _('Accepted')),
-            ('rejected', _('Rejected')),
-            ('expired', _('Expired')),
-        ]
-    )
+    STATUS_CHOICES = [
+        ('draft', _('Draft')),
+        ('sent', _('Sent')),
+        ('accepted', _('Accepted')),
+        ('rejected', _('Rejected')),
+        ('expired', _('Expired')),
+        # outros status...
+    ]
+    
+    status = models.CharField(max_length=50,choices=STATUS_CHOICES)
     notes = models.TextField(blank=True)
     terms_conditions = models.TextField()
     
@@ -89,16 +89,16 @@ class ServiceDeliverable(BaseModel):
     appointment = models.ForeignKey(ServiceAppointment, on_delete=models.CASCADE, related_name='deliverables')
     name = models.CharField(max_length=200)
     description = models.TextField()
-    status = models.CharField(
-        max_length=50,
-        choices=[
-            ('pending', _('Pending')),
-            ('in_progress', _('In Progress')),
-            ('completed', _('Completed')),
-            ('accepted', _('Accepted')),
-            ('rejected', _('Rejected')),
-        ]
-    )
+    STATUS_CHOICES = [
+        ('pending', _('Pending')),
+        ('in_progress', _('In Progress')),
+        ('completed', _('Completed')),
+        ('accepted', _('Accepted')),
+        ('rejected', _('Rejected')),
+        # outros status...
+    ]
+    
+    status = models.CharField(max_length=50,choices=STATUS_CHOICES)
     due_date = models.DateTimeField()
     completed_date = models.DateTimeField(null=True, blank=True)
     attachments = models.JSONField(default=list)
