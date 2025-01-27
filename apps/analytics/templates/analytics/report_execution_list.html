@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Report Executions" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{% trans "Report Executions" %}</h1>
+    
+    {% if report_executions %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "Report" %}</th>
+                    <th>{% trans "Executed By" %}</th>
+                    <th>{% trans "Start Time" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for execution in report_executions %}
+                    <tr>
+                        <td>{{ execution.report.name }}</td>
+                        <td>{{ execution.executed_by.get_full_name }}</td>
+                        <td>{{ execution.start_time }}</td>
+                        <td>{{ execution.get_status_display }}</td>
+                        <td>
+                            <a href="{% url 'analytics:report_execution_detail' execution.pk %}" class="btn btn-sm btn-info">{% trans "View" %}</a>
+                            <a href="{% url 'analytics:report_execution_update' execution.pk %}" class="btn btn-sm btn-warning">{% trans "Edit" %}</a>
+                            <a href="{% url 'analytics:report_execution_delete' execution.pk %}" class="btn btn-sm btn-danger">{% trans "Delete" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>{% trans "No report executions found." %}</p>
+    {% endif %}
+    
+    <a href="{% url 'analytics:report_execution_create' %}" class="btn btn-primary">{% trans "Create New Report Execution" %}</a>
+</div>
+{% endblock %}

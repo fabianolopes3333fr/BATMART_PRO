@@ -10,7 +10,7 @@ from .forms import ReportForm, ReportExecutionForm, DashboardForm, MetricForm, A
 class ReportListView(LoginRequiredMixin, ListView):
     model = Report
     template_name = 'analytics/report_list.html'
-    context_object_name = 'reports'
+    context_object_name = 'report_list'
 
     def get_queryset(self):
         return Report.objects.filter(company=self.request.user.company)
@@ -45,7 +45,7 @@ class ReportUpdateView(LoginRequiredMixin, UpdateView):
 class ReportDeleteView(LoginRequiredMixin, DeleteView):
     model = Report
     template_name = 'analytics/report_confirm_delete.html'
-    success_url = reverse_lazy('report_list')
+    success_url = reverse_lazy('analytics:report_list')
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, _('Report deleted successfully.'))

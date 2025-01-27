@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Report Detail" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{% trans "Report Detail" %}</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ report.name }}</h5>
+            <p class="card-text">{{ report.description }}</p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>{% trans "Company" %}:</strong> {{ report.company }}</li>
+                <li class="list-group-item"><strong>{% trans "Report Type" %}:</strong> {{ report.get_report_type_display }}</li>
+                <li class="list-group-item"><strong>{% trans "Created By" %}:</strong> {{ report.created_by }}</li>
+                <li class="list-group-item"><strong>{% trans "Created At" %}:</strong> {{ report.created_at }}</li>
+                <li class="list-group-item"><strong>{% trans "Updated At" %}:</strong> {{ report.updated_at }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2 class="mt-4 mb-3">{% trans "Report Template" %}</h2>
+    <pre class="bg-light p-3 rounded"><code>{{ report.template|pprint }}</code></pre>
+
+    <h2 class="mt-4 mb-3">{% trans "Report Parameters" %}</h2>
+    <pre class="bg-light p-3 rounded"><code>{{ report.parameters|pprint }}</code></pre>
+
+    <h2 class="mt-4 mb-3">{% trans "Report Schedule" %}</h2>
+    <pre class="bg-light p-3 rounded"><code>{{ report.schedule|pprint }}</code></pre>
+
+    <h2 class="mt-4 mb-3">{% trans "Report Recipients" %}</h2>
+    <ul class="list-group">
+        {% for recipient in report.recipients %}
+            <li class="list-group-item">{{ recipient }}</li>
+        {% empty %}
+            <li class="list-group-item">{% trans "No recipients specified" %}</li>
+        {% endfor %}
+    </ul>
+    <div class="mt-4">
+        <a href="{% url 'analytics:report_update' report.pk %}" class="btn btn-primary">{% trans "Edit Report" %}</a>
+        <a href="{% url 'analytics:report_delete' report.pk %}" class="btn btn-danger">{% trans "Delete Report" %}</a>
+        <a href="{% url 'analytics:report_list' %}" class="btn btn-secondary">{% trans "Back to List" %}</a>
+    </div>
+</div>
+{% endblock %}

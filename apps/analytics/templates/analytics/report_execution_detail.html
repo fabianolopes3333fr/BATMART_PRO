@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Report Execution Detail" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{% trans "Report Execution Detail" %}</h1>
+    
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ report_execution.report.name }}</h5>
+            <p class="card-text"><strong>{% trans "Executed By" %}:</strong> {{ report_execution.executed_by.get_full_name }}</p>
+            <p class="card-text"><strong>{% trans "Start Time" %}:</strong> {{ report_execution.start_time }}</p>
+            <p class="card-text"><strong>{% trans "End Time" %}:</strong> {{ report_execution.end_time|default:_("Not finished") }}</p>
+            <p class="card-text"><strong>{% trans "Status" %}:</strong> {{ report_execution.get_status_display }}</p>
+            
+            {% if report_execution.parameters_used %}
+            <h6>{% trans "Parameters Used" %}:</h6>
+            <pre>{{ report_execution.parameters_used|pprint }}</pre>
+            {% endif %}
+            
+            {% if report_execution.result_data %}
+            <h6>{% trans "Result Data" %}:</h6>
+            <pre>{{ report_execution.result_data|pprint }}</pre>
+            {% endif %}
+            
+            {% if report_execution.error_message %}
+            <h6 class="text-danger">{% trans "Error Message" %}:</h6>
+            <p>{{ report_execution.error_message }}</p>
+            {% endif %}
+            
+            {% if report_execution.file_output %}
+            <h6>{% trans "File Output" %}:</h6>
+            <pre>{{ report_execution.file_output|pprint }}</pre>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <a href="{% url 'analytics:report_execution_list' %}" class="btn btn-secondary">{% trans "Back to List" %}</a>
+        <a href="{% url 'analytics:report_execution_update' report_execution.pk %}" class="btn btn-warning">{% trans "Edit" %}</a>
+        <a href="{% url 'analytics:report_execution_delete' report_execution.pk %}" class="btn btn-danger">{% trans "Delete" %}</a>
+    </div>
+</div>
+{% endblock %}
