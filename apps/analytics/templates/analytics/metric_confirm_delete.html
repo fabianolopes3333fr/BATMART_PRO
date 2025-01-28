@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Delete Metric" %}: {{ metric.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0">{% trans "Confirm Deletion" %}</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{% trans "Are you sure you want to delete the following metric?" %}</p>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item"><strong>{% trans "Name" %}:</strong> {{ metric.name }}</li>
+                        <li class="list-group-item"><strong>{% trans "Description" %}:</strong> {{ metric.description }}</li>
+                        <li class="list-group-item"><strong>{% trans "Type" %}:</strong> {{ metric.get_metric_type_display }}</li>
+                    </ul>
+                    <div class="alert alert-warning" role="alert">
+                        {% trans "This action cannot be undone. All associated data will be permanently deleted." %}
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">{% trans "Confirm Delete" %}</button>
+                        <a href="{% url 'analytics:metric_detail' metric.id %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

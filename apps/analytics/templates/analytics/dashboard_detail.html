@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Dashboard Detail" %}: {{ dashboard.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{{ dashboard.name }}</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Description" %}</h5>
+            <p class="card-text">{{ dashboard.description }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Details" %}</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>{% trans "Created by" %}:</strong> {{ dashboard.created_by.get_full_name }}</li>
+                <li class="list-group-item"><strong>{% trans "Created at" %}:</strong> {{ dashboard.created_at|date:"DATETIME_FORMAT" }}</li>
+                <li class="list-group-item"><strong>{% trans "Last updated" %}:</strong> {{ dashboard.updated_at|date:"DATETIME_FORMAT" }}</li>
+                <li class="list-group-item"><strong>{% trans "Is default" %}:</strong> {% if dashboard.is_default %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Layout" %}</h5>
+            <pre class="bg-light p-3">{{ dashboard.layout|pprint }}</pre>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Widgets" %}</h5>
+            <ul class="list-group list-group-flush">
+                {% for widget in dashboard.widgets %}
+                    <li class="list-group-item">{{ widget.name }} - {{ widget.type }}</li>
+                {% empty %}
+                    <li class="list-group-item">{% trans "No widgets available" %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'analytics:dashboard_update' dashboard.id %}" class="btn btn-primary">{% trans "Edit Dashboard" %}</a>
+        <a href="{% url 'analytics:dashboard_delete' dashboard.id %}" class="btn btn-danger">{% trans "Delete Dashboard" %}</a>
+        <a href="{% url 'analytics:dashboard_list' %}" class="btn btn-secondary">{% trans "Back to List" %}</a>
+    </div>
+</div>
+{% endblock %}

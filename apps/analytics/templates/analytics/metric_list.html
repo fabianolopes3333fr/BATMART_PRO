@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Metrics List" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{% trans "Metrics" %}</h1>
+    
+    <a href="{% url 'analytics:metric_create' %}" class="btn btn-primary mb-3">{% trans "Create New Metric" %}</a>
+    
+    {% if metrics %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Type" %}</th>
+                    <th>{% trans "Last Updated" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for metric in metrics %}
+                    <tr>
+                        <td>{{ metric.name }}</td>
+                        <td>{{ metric.get_metric_type_display }}</td>
+                        <td>{{ metric.last_updated|default_if_none:"-" }}</td>
+                        <td>
+                            {% if metric.is_active %}
+                                <span class="badge bg-success">{% trans "Active" %}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{% trans "Inactive" %}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'analytics:metric_detail' metric.id %}" class="btn btn-sm btn-info">{% trans "View" %}</a>
+                            <a href="{% url 'analytics:metric_update' metric.id %}" class="btn btn-sm btn-warning">{% trans "Edit" %}</a>
+                            <a href="{% url 'analytics:metric_delete' metric.id %}" class="btn btn-sm btn-danger">{% trans "Delete" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>{% trans "No metrics available." %}</p>
+    {% endif %}
+</div>
+{% endblock %}

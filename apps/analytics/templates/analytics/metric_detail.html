@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Metric Detail" %}: {{ metric.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{{ metric.name }}</h1>
+    
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Metric Details" %}</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>{% trans "Description" %}:</strong> {{ metric.description }}</li>
+                <li class="list-group-item"><strong>{% trans "Type" %}:</strong> {{ metric.get_metric_type_display }}</li>
+                <li class="list-group-item"><strong>{% trans "Last Updated" %}:</strong> {{ metric.last_updated|default_if_none:"-" }}</li>
+                <li class="list-group-item">
+                    <strong>{% trans "Status" %}:</strong>
+                    {% if metric.is_active %}
+                        <span class="badge bg-success">{% trans "Active" %}</span>
+                    {% else %}
+                        <span class="badge bg-danger">{% trans "Inactive" %}</span>
+                    {% endif %}
+                </li>
+                <li class="list-group-item"><strong>{% trans "Update Frequency" %}:</strong> {{ metric.get_update_frequency_display }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Calculation" %}</h5>
+            <pre>{{ metric.calculation|pprint }}</pre>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Dimensions" %}</h5>
+            <ul>
+                {% for dimension in metric.dimensions %}
+                    <li>{{ dimension }}</li>
+                {% empty %}
+                    <li>{% trans "No dimensions specified" %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Filters" %}</h5>
+            <pre>{{ metric.filters|pprint }}</pre>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'analytics:metric_update' metric.id %}" class="btn btn-primary">{% trans "Edit" %}</a>
+        <a href="{% url 'analytics:metric_delete' metric.id %}" class="btn btn-danger">{% trans "Delete" %}</a>
+        <a href="{% url 'analytics:metric_list' %}" class="btn btn-secondary">{% trans "Back to List" %}</a>
+    </div>
+</div>
+{% endblock %}

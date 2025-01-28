@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Confirm Delete Dashboard" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{% trans "Confirm Delete Dashboard" %}</h1>
+    
+    <div class="alert alert-danger" role="alert">
+        {% trans "Are you sure you want to delete the dashboard" %} "{{ object.name }}"?
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        <p>{% trans "This action cannot be undone." %}</p>
+        <button type="submit" class="btn btn-danger">{% trans "Confirm Delete" %}</button>
+        <a href="{% url 'analytics:dashboard_detail' object.id %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+    </form>
+</div>
+{% endblock %}
